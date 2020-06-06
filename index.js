@@ -1,9 +1,12 @@
 const fs = require('fs');
-const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token, activityName, presenceType, botStatus } = require('./config.json');
+const { Client, Collection } = require('discord.js');
+// const GphApiClient = require('giphy-js-sdk-core');
 
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
+const client = new Client({
+	disableEveryone: true,
+});
+client.commands = new Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -12,10 +15,16 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
-const cooldowns = new Discord.Collection();
+const cooldowns = new Collection();
 
 client.once('ready', () => {
-	console.log('Ready!');
+	client.user.setPresence({
+        activity: {
+            name: activityName,
+            type: presenceType,
+        },
+        status: botStatus,
+    }).then(console.log).catch(console.error);
 });
 
 client.on('message', message => {
@@ -44,7 +53,7 @@ client.on('message', message => {
 	}
 
 	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+		cooldowns.set(command.name, new Collection());
 	}
 
 	const now = Date.now();
