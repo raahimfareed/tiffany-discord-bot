@@ -1,4 +1,5 @@
 const { prefix } = require('../config.json');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'help',
@@ -9,13 +10,23 @@ module.exports = {
     execute(message, args) {
         const data = [];
         const { commands } = message.client;
-
         if (!args.length) {
             data.push('Here\'s a list of all my commands:');
-            data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
+            commands.forEach(command => {
+                // data.push(commands.map(command => command.name).join(', '));
+                data.push(`\`${command.name}\` - ${command.description}`);
+            });
+            data.push(`\nYou can send \`${prefix}${this.name} ${this.usage}\` to get info on a specific command!`);
 
-            return message.author.send(data, { split: true })
+            const helpText = new MessageEmbed()
+                .setColor(0xEEEEEE)
+                .setAuthor('Help')
+                .setURL('https://trello.com/b/FB61AsAb/tiffany-discord-bot')
+                .setDescription(data)
+                .setTimestamp();
+                // .setAuthor(message.client.guild.member);
+
+            return message.author.send(helpText)
                 .then(() => {
                     if (message.channel.type === 'dm') return;
                     message.reply('I\'ve sent you a DM with all my commands!');
