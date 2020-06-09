@@ -27,6 +27,20 @@ client.once('ready', () => {
     }).then(console.log).catch(console.error);
 });
 
+client.on('guildMemberAdd', member => {
+	const greetChannel = member.guild.channels.cache.find(channel => channel.name == 'user-stats');
+
+	if (!greetChannel) return;
+	greetChannel.send(`Welcome to ${member.guild.name}, ${member}`);
+});
+
+// client.on('guildMemberRemove', member => {
+// 	const greetChannel = member.guild.channels.cache.find(channel => channel.name == 'user-stats');
+
+// 	if (!greetChannel) return;
+// 	greetChannel.send(`${member} just left ${member.guild.name}`);
+// });
+
 client.on('message', message => {
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
