@@ -26,14 +26,7 @@ module.exports = {
             console.log(`An error occurred: ${err}`);
             return message.reply('Something wen\'t wrong! If this isn\'t fixed in the next hour, please appeal a complaint in my discord server!');
         });
-            // .then(() => {
-
-            // })
-            // .catch(err => {
-            //     console.log(`An error occurred: ${err}`);
-            //     return message.reply('Something wen\'t wrong! If this isn\'t fixed in the next hour, please appeal a complaint in my discord server!');
-            // });
-
+        if (!res || typeof res !== 'object') return;
             if (!res.graphql.user.username) return message.reply('I couldn\'t find an account :(');
 
                 const user = res.graphql.user;
